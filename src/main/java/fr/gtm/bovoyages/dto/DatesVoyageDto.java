@@ -10,7 +10,7 @@ import lombok.Data;
 public class DatesVoyageDto implements Serializable{
 	
 	private long id;
-	private Date dateDepart;
+	private Date dateAller;
 	private Date dateRetour;
 	private double prixHT;
 	private int nbPlaces;
@@ -20,7 +20,7 @@ public class DatesVoyageDto implements Serializable{
 	
 	public DatesVoyageDto(DatesVoyage datesVoyages) {
 	
-		this.dateDepart = datesVoyages.getDateDepart();
+		this.dateAller = datesVoyages.getDateAller();
 		this.dateRetour = datesVoyages.getDateRetour();
 		this.prixHT = datesVoyages.getPrixHT();
 		this.nbPlaces = datesVoyages.getNbPlaces();

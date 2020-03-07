@@ -31,7 +31,6 @@ public class Client implements Serializable {/**
 	
 	private String nom;
 	private String digest ;
-	@Column (name="username")
 	private String user;
 	@Column (name="emails")
 	private String mail;

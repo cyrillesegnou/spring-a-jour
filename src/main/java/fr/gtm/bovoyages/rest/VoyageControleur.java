@@ -35,7 +35,6 @@ import fr.gtm.bovoyages.utils.ValidClient;
 
 @RestController
 @CrossOrigin
-
 public class VoyageControleur {
 
 	@Autowired
@@ -64,35 +63,35 @@ public class VoyageControleur {
 	}
 
 	@PostMapping("/voyage/commande")
-	public String commanderVoyage(@RequestBody Voyage v) {
+	public InscriptionResponse commanderVoyage(@RequestBody Voyage v) {
 		long idDate = v.getDatesVoyages().getId();
 		int nbPlaces = dvrepo.findById(idDate).get().getNbPlaces();
 		int nbVoyageurs = v.getVoyageurs().size();
 		if (nbPlaces < nbVoyageurs) {
-			return "le nombre sélectionné est supérieur au nombre de place disponible";
+			return new InscriptionResponse("le nombre sélectionné est supérieur au nombre de place disponible" , false ) ;
 		}
 		else {
 		v.getDatesVoyages().setNbPlaces(nbPlaces - nbVoyageurs);
 		dvrepo.save(v.getDatesVoyages());
 		vrepo.save(v);
-		return "votre voyage à ete commander pour la region : " + 
-		v.getRegion() + " pour les dates " + v.getDatesVoyages().getDateDepart() 
-		+ " " + v.getDatesVoyages().getDateRetour();
+		return new InscriptionResponse("votre voyage à ete commander pour la region : " + v.getRegion() +
+				" pour les dates " + v.getDatesVoyages().getDateAller() 
+				+ " " + v.getDatesVoyages().getDateRetour(), true);
 	}
 	
 	}
 	
 	@PostMapping("/client/newclient")
-	public String inscriptionc(String nom, String pswd, String mail, String user ) throws NoSuchAlgorithmException {
+	public InscriptionResponse inscriptionc(String nom, String pswd, String mail, String user ) throws NoSuchAlgorithmException {
 		String digest = Util.toSha256(pswd);
 		try {
 			Client c = crepo.getByNom(nom);
 			c.getNom();
 		} catch (NullPointerException e) {
 			crepo.creationClient(nom, digest, mail, user); 
-					return "votre compte à bien été créé";  
+					return new InscriptionResponse("Votre compte à bien été créé", true);  
 		}
-		return "le nom de cette utilisatur existe deja, veuillez modifier et reéssayer";
+		return new InscriptionResponse("Ce Compte exite deja, veuiller modifier les champs et recommencer", false); 
 	}
 		
 //		@PostMapping("/inscription/newclient")
@@ -104,19 +103,18 @@ public class VoyageControleur {
 //			}
 //			c.setDigest(Util.toSha256(c.getdigets()));
 //			repo.save(newUser);
-//			return new InscriptionResponse("inscription effectuée", true);
-//			
+//			return new InscriptionResponse("inscription effectuée", true);			
 //		}
 	
-	@GetMapping("/authentification/{mon}/{pswd}")
-	public ValidClient authentification(@PathVariable String nom, @PathVariable String pswd) throws NoSuchAlgorithmException {
-		Optional<Client> opt=crepo.findByNomAndDigest(nom, Util.toSha256(pswd));
-		if(opt.isPresent()) {
-			Client c = opt.get();
-			return new ValidClient(c.getNom(), true);
-		}
-		return new ValidClient(",", false);
-	}
+	@GetMapping("/authentification/{user}/{pswd}")
+	public ValidClient authentification(@PathVariable String user, @PathVariable String pswd) throws NoSuchAlgorithmException {
+		 Optional<Client> opt= crepo.findByUserAndDigest(user, Util.toSha256(pswd));
+		 if(opt.isPresent()) {
+			 Client u = opt.get();
+			 return new ValidClient("Vous vous etes bien connecté ", u.getUser(),true);
+		 }
+		return new ValidClient("cette utilisateur n'existe"," SVP reverifier les champs et recommencé", false);
+	 }
 	
 	@GetMapping("/destinations")
 	public List<DestinationDto> getAllDestinations() {
@@ -130,7 +128,7 @@ public class VoyageControleur {
 		return dtos;
 	}
 	
-	@GetMapping("/destinationDetails/{id}")
+	@GetMapping("/destinationdetails/{id}")
 	public DestinationDto getDestinationDetails(@PathVariable("id") long id) {
 		Destination destination = drepo.findById(id).get();
 		if (destination.getDeleted() != 1) {
@@ -152,7 +150,7 @@ public class VoyageControleur {
 		return dtos;
 	}
 	
-	@GetMapping("/destination/{id}/dates")
+	@GetMapping("/destination/dates/{id}")
 	public List<DatesVoyageDto> getDatesByDestinationId(@PathVariable("id") long id){
 		Destination destination = drepo.findById(id).get();
 		List<DatesVoyageDto> dtos=new ArrayList<DatesVoyageDto>();

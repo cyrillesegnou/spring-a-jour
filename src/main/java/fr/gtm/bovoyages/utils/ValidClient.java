@@ -6,12 +6,14 @@ import lombok.Data;
 
 @Data
 public class ValidClient implements Serializable{
+	
 	String nom;
+	String user;
 	
 	boolean state;
-	public ValidClient(String nom, boolean state) {
+	public ValidClient(String nom, String user, boolean state) {
 		this.nom = nom;
-		
+		this.user =user ;
 		this.state = state;	
 }
 	public String getNom() {

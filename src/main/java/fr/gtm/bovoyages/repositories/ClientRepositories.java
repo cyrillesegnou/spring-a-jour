@@ -19,11 +19,11 @@ Client getByNom(String nom);
 //	String getValues(String nom);
 	
 	@Modifying
-	@Query(value = "INSERT INTO clients (pk_client, nom, digest, emails, username) VALUES (0, ?1, ?2, ?3, ?4)", nativeQuery = true)
+	@Query(value = "INSERT INTO clients (pk_client, nom, digest, emails, user) VALUES (0, ?1, ?2, ?3, ?4)", nativeQuery = true)
 	@Transactional
 	void creationClient( String nom, String digest, String user, String mail);
 	
-	Optional<Client> findByNomAndDigest(String nom, String digets);
+	Optional<Client> findByUserAndDigest(String nom, String digets);
 
 
 }

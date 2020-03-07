@@ -19,7 +19,6 @@ import lombok.Data;
 @Table (name ="dates_voyages")
 @Access(AccessType.FIELD)
 @Data
-
 public class DatesVoyage implements Serializable {
 	
 	
@@ -32,7 +31,7 @@ public class DatesVoyage implements Serializable {
 	@Column (name="pk_date_voyage")
 	private long id;
 	@Column (name="date_depart")
-	private Date dateDepart;
+	private Date dateAller;
 	@Column (name="date_retour")
 	private Date dateRetour;
 	@Column (name="prixHT")
@@ -51,7 +50,7 @@ public class DatesVoyage implements Serializable {
 
 	public DatesVoyage(Date dateDepart, Date dateRetour, double prixHT, int nbPlaces) {
 
-		this.dateDepart = dateDepart;
+		this.dateAller = dateDepart;
 		this.dateRetour = dateRetour;
 		this.prixHT = prixHT;
 		this.nbPlaces = nbPlaces;

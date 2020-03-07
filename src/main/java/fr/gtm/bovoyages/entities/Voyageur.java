@@ -33,8 +33,9 @@ public class Voyageur implements Serializable{
 	
 	public Voyageur() {}
 	
-	public Voyageur(String civilite, String nom, String prenom, Date dateNaissance) {
-
+	public Voyageur(long id, String civilite, String nom, String prenom, Date dateNaissance) {
+		
+		this.id=id ;
 		this.civilite = civilite;
 		this.nom = nom;
 		this.prenom = prenom;
