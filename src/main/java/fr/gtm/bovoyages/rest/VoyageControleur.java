@@ -170,6 +170,7 @@ public class VoyageControleur {
 			List<Voyageur> voyageurs = voyage.getVoyageurs();
 			voyageurs.add(voyageur);
 			voyage.setVoyageurs(voyageurs);
+			
 			return voyage;
 		}
 	
